@@ -1,0 +1,101 @@
+.rightWrapper h2{
+    text-align: center;
+    margin: 16px 0px;
+}
+
+.completedContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: 78vh;
+    overflow-y: scroll;
+}
+
+.completedContainer::-webkit-scrollbar {
+    display: none;
+}
+
+/* .completedContainer .doneItem { */
+.doneItem {
+    transition: scale 600ms;
+    transition: transform 500ms;
+    margin-top: 10px;
+    padding: 16px 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    width: 70%;
+    height: 25px;
+    border: none;
+    outline: none;
+    background: linear-gradient(0.10turn, rgb(41, 235, 193), rgb(110, 255, 158));
+    color: #000;
+    border-radius: 16px 4px 16px 4px;
+    text-transform: capitalize;
+    position: relative;
+}
+
+.deleted{
+    text-decoration: line-through !important;
+    color: gray !important;
+}
+
+.deletedBtn{
+    color: rgba(255, 255, 255, 0.425) !important;
+}
+
+.deleted{
+    background: linear-gradient(0.20turn, rgb(250, 153, 115),rgb(245, 93, 82)) !important;
+}
+
+.doneItem:hover {
+    transform: scale(1.2);
+    background: linear-gradient(0.30turn, rgb(255, 173, 211), rgb(255, 0, 140));
+}
+
+.textInput:hover {
+    border-bottom: 4px solid rgb(11, 0, 170);
+}
+
+.textInput:focus {
+    border-bottom: 4px solid rgb(136, 0, 170);
+}
+
+.textInput::placeholder {
+    color: rgb(156, 152, 152);
+}
+
+.completedContainer p {
+    text-align: center;
+    font-weight: 600;
+    max-width: 80%;
+    line-height: 24px;
+}
+
+.doneItem .deletedBtn {
+    position: absolute;
+    bottom: 8px;
+    right: 0;
+    height: inherit;
+    padding: 8px;
+    color: #000;
+    cursor: pointer;
+}
+
+.doneItem .completeBtn{
+    position: absolute;
+    bottom: 8px;
+    right: 0;
+    height: inherit;
+    padding: 8px;
+    color: #000;
+    cursor: pointer;
+}
+
+.deletedBtn:hover  {
+    color: rgb(0, 0, 0) !important;
+}
+
+.deleteBtn:hover{
+    color: rgb(255, 226, 226);
+}
