@@ -12,15 +12,12 @@ function HomePage() {
     const [text, setText] = useState("");
     const [desc, setDesc] = useState("");
     const [saveSession, setSaveSession] = useState(true);
-
     const [state, dispatch] = useReducer(todoReducer, todoState);
-    console.log("reducerState", state);
-
     const regEx = /^[a-zA-Z][a-zA-Z ]*$/;
     let isCompleted = false;
     let isPending = false;
 
-    if (state.data.length > 1) {
+    if (state.data.length >= 1) {
         console.log(state.data.length);
         isCompleted = state.data.filter(item => item.completed === true).length >= 1;
         isPending = state.data.filter(item => item.pending === true || item.deleted === true).length >= 1;
@@ -40,12 +37,10 @@ function HomePage() {
                 description: desc,
                 task: text
             };
-            await dispatch({ type: "ADD_TASK", payload: todoItem });
-            console.log("Cooked Value", todoItem);
+            dispatch({ type: "ADD_TASK", payload: todoItem });
             setText("");
             setErr(false);
             setDesc("");
-            updateLocalStorage(todoItem);
             return;
         };
     };
@@ -54,8 +49,7 @@ function HomePage() {
         const updated = state.data.filter(item => item.id !== data.id);
         data.deleted = true;
         updated.push(data);
-        await dispatch({ type: "UPDATE_TASK", payload: updated });
-        updateLocalStorage(data);
+        dispatch({ type: "UPDATE_TASK", payload: updated });
         return;
     };
 
@@ -64,25 +58,22 @@ function HomePage() {
         data.completed = true;
         data.pending = false;
         updated.push(data);
-        await dispatch({ type: "UPDATE_TASK", payload: updated });
-        updateLocalStorage(data);
+        dispatch({ type: "UPDATE_TASK", payload: updated });
         return;
     };
 
     const deleteTodo = async (data) => {
         const updated = state.data.filter((item) => item.id !== data.id);
-        await dispatch({ type: "UPDATE_TASK", payload: updated });
-        updateLocalStorage(data);
+        dispatch({ type: "UPDATE_TASK", payload: updated });
         return;
     };
 
     const undoDelete = async (data) => {
-        await dispatch({ type: "UNDO_DELETE", payload: data });
-        updateLocalStorage(data);
+        dispatch({ type: "UNDO_DELETE", payload: data });
         return;
     };
 
-    const updateLocalStorage = (data) => {
+    const updateLocalStorage = () => {
         if (saveSession) {
             console.log("saving", state.data);
             const values = state.data;
@@ -103,6 +94,11 @@ function HomePage() {
             return;
         };
     }, []);
+
+    useEffect(() => {
+        console.log("state changed");
+        updateLocalStorage();
+    }, [state]);
 
     return (
         <div className="home">
