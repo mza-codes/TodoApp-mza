@@ -74,7 +74,7 @@ body{
 }
 
 .addData h2 {
-  margin: 16px;
+  margin: 16px 0px 0px 0px;
 }
 
 .addData p {
@@ -83,6 +83,10 @@ body{
   font-weight: 600;
   max-width: 80%;
   line-height: 24px;
+}
+
+.addData p b{
+  font-size: 1.5rem !important;
 }
 
 .addBtn {

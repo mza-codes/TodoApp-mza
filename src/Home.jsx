@@ -4,18 +4,17 @@ import { timeGreeting } from './Utils/TimeUtils';
 import './Components/leftSection.css';
 import './Components/rightSection.css';
 import './Components/centerSection.css';
+
 function Home() {
     const today = new Date().toLocaleString("en-IN", { weekday: "long", });
-    const [err, setErr] = useState(false);
     const time = timeGreeting[new Date().getHours()];
+    const [err, setErr] = useState(false);
     const [text, setText] = useState("");
     const [desc, setDesc] = useState("");
     const [todos, setTodos] = useState([]);
     const [completedTodos, setCompletedTodos] = useState([]);
     const [deleted, setDeleted] = useState([]);
-    const [userTodos, setUserTodos] = useState([]);
-
-    console.log('USERTODOS', userTodos);
+    const [saveSession, setSaveSession] = useState(true);
 
     const regEx = /^[a-zA-Z][a-zA-Z ]*$/;
 
@@ -38,7 +37,7 @@ function Home() {
             setText("");
             setErr(false);
             setDesc("");
-            // localStorage.setItem("mza-TodoApp", JSON.stringify(todos));
+            updateLocalStorage(todoItem);
             return;
         };
     };
@@ -48,6 +47,7 @@ function Home() {
         data.deleted = true;
         data.pending = false;
         setDeleted((current) => ([...current, data]));
+        updateLocalStorage(data);
     };
 
     const handleDone = (data) => {
@@ -55,33 +55,39 @@ function Home() {
         data.completed = true;
         data.pending = false;
         setCompletedTodos((curr) => ([...curr, data]));
+        updateLocalStorage(data);
+    };
+
+    const deleteTodo = (data) => {
+        setDeleted((curr) => ([...curr.filter((item) => data.id !== item.id)]));
+        updateLocalStorage(data);
+    };
+
+    const updateLocalStorage = (data) => {
+        if (saveSession) {
+            console.log("saving");
+            const userData = {
+                todos: todos, completedTodos: completedTodos, deleted: deleted
+            };
+            console.log("userDataTosave Locally", userData);
+            localStorage.setItem("mza-TodoApp", JSON.stringify(userData));
+            console.log("saved DATA");
+            return true;
+        } else {
+            console.log("unSaved Data user not ticked");
+            return false;
+        };
     };
 
     useEffect(() => {
-        const data = localStorage.getItem("mza-TodoApp");
+        let data = localStorage.getItem("mza-TodoApp");
         if (data !== null || undefined) {
-            setTodos(JSON.parse(data));
+            data = JSON.parse(data);
+            setTodos(data.todos);
+            setDeleted(data.deleted);
+            setCompletedTodos(data.completedTodos);
+            return;
         };
-    }, []);
-
-    // useEffect(() => {
-
-    // }, []);
-
-    window.onbeforeunload = () => {
-        console.log("saving");
-        const userData = {
-            todos: todos, completedTodos: completedTodos, deleted: deleted
-        };
-        setUserTodos((current) => ([...current, userData]));
-        localStorage.setItem("mza-TodoApp", JSON.stringify(userData));
-        console.log("saved DATA");
-        return "Session will be lost";
-    };
-
-    useEffect(() => {
-        console.log('SETTING TO USER ARRAY');
-
     }, []);
 
     return (
@@ -105,7 +111,7 @@ function Home() {
                             {deleted?.map((todo, i) => (
                                 <div className={`doneItem ${"deleted"}`} key={i}>
                                     {todo.task.substring(0, 18)}
-                                    <div className="deletedBtn" onClick={e => console.log(e)}>
+                                    <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
                                         <i className="bi bi-file-earmark-x-fill"></i>
                                     </div>
                                 </div>
@@ -118,7 +124,7 @@ function Home() {
                 <div className="centerWrapper">
                     <div className="addData">
                         <h2>What's Up!</h2>
-                        <p>It's {today} {time} & You're still Up! <br />
+                        <p>It's <b>{today} {time}</b> & You're Here! <br />
                             How about creating a to do list!</p>
                         <input type="text" maxLength="50" name='todo' className={`textInput ${err ? "showErr" : ""}`} id='textInput'
                             onKeyPress={e => { if (e.key === "Enter") { setText(e.target.value); handleList() } }}
@@ -132,6 +138,12 @@ function Home() {
                             onKeyPress={e => { if (e.key === "Enter") { setDesc(e.target.value); handleList() } }} ></textarea>
                         {/* <iconify-icon icon="cil:truck" /> */}
                         <button onClick={e => { handleList(); setDesc(""); }}>Submit</button>
+                    </div>
+                    <div className='toggleBtn'>
+                        <h5>Save Session </h5>
+                        <iconify-icon onClick={e => setSaveSession(!saveSession)} style={{ color: `${saveSession ? "green" : "black"}` }}
+                            icon={saveSession ? "foundation:checkbox" : "ic:twotone-check-box-outline-blank"} />
+                        {/* <iconify-icon icon="bxs:checkbox" />  */}
                     </div>
                 </div>
             </div>
