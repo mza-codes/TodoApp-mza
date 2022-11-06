@@ -17,22 +17,23 @@ body{
 
 .home {
   min-height: 100vh;
-  background: linear-gradient(0.5turn, #fdff, #fdcd, #fdfd);
+  /* background: linear-gradient(0.5turn, #fdff, #fdcd, #fdfd); */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
 }
 
 .card {
   margin: 10px;
-  /* border: 1px solid black; */
-  height: 90vh;
+  height: auto;
+  max-height: 96vh;
   width: 30%;
   min-width: 350px;
   border-radius: 10px 10px 16px 18px;
-  box-shadow: 0px 0px 18px 0px #000000;
+  /* box-shadow: 0px 0px 18px 0px #000000; */
+  /* background: linear-gradient(0.50turn,transparent,rgb(159, 255, 255),rgb(241, 241, 166),transparent); */
 }
 .card:empty{
   box-shadow: none !important;

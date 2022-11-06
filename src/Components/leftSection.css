@@ -1,4 +1,4 @@
-.leftWrapper h2{
+.leftWrapper h2 {
     text-align: center;
     margin: 16px 0px;
 }
@@ -8,9 +8,10 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    
-    height: 78vh;
+    height: auto;
+    max-height: 85vh;
     overflow-y: scroll;
+    padding: 16px;
 }
 
 .todoContainer::-webkit-scrollbar {
@@ -41,12 +42,6 @@
     background: linear-gradient(0.30turn, rgb(173, 206, 255), rgb(0, 162, 255));
 }
 
-/*  */
-
-/*  */
-
-/*  */
-
 .todoContainer p {
     text-align: center;
     font-weight: 600;
@@ -64,7 +59,7 @@
     cursor: pointer;
 }
 
-.todoItem .deleteBtn{
+.todoItem .deleteBtn {
     position: absolute;
     bottom: 8px;
     right: 8%;
@@ -74,10 +69,24 @@
     cursor: pointer;
 }
 
-.doneBtn:hover  {
+.doneBtn:hover {
     color: rgb(141, 255, 47);
 }
 
-.deleteBtn:hover{
+.deleteBtn:hover {
     color: rgb(255, 226, 226);
+}
+
+.undoBtn {
+    position: absolute;
+    bottom: 8px;
+    right: 10%;
+    height: inherit;
+    padding: 8px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.undoBtn:hover {
+    color: #000;
 }
