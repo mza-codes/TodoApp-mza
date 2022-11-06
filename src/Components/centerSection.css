@@ -1,0 +1,56 @@
+.centerWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.section textarea{
+    border-radius: 10px;
+    font-size: 1.0rem;
+    padding: 16px;
+    max-width: 80%;
+    min-width: 70%;
+    max-height: 40vh;
+    min-height: 10vh;
+    color: #fff;
+    outline: none !important;
+    border: none !important;
+    background: rgba(0, 0, 0, 0.342);
+    text-transform: capitalize;
+}
+
+.section textarea::placeholder{
+    color: rgb(214, 211, 211) !important;
+}
+
+.section p {
+    padding: 6px 0px;
+    font-weight:600;
+}
+
+.section button{
+    margin: 6px;
+    padding: 8px;
+    border: none;
+    outline: none;
+    background: linear-gradient(to right,rgb(0, 255, 55),rgb(50, 214, 255));
+    color: #000;
+    border-radius: 10px 4px 10px 4px;
+    transition: all 600ms;
+    font-weight: 600;
+    cursor: pointer;
+}
+.section button:hover{
+    border-radius: 4px 10px 4px 10px;
+    background: linear-gradient(to left,rgb(255, 81, 0),rgb(255, 0, 255));
+    color: #fff;
+    transform: scale(1.1);
+    
+}

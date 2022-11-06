@@ -53,17 +53,11 @@
     background: linear-gradient(0.30turn, rgb(255, 173, 211), rgb(255, 0, 140));
 }
 
-.textInput:hover {
-    border-bottom: 4px solid rgb(11, 0, 170);
-}
+/*  */
 
-.textInput:focus {
-    border-bottom: 4px solid rgb(136, 0, 170);
-}
+/*  */
 
-.textInput::placeholder {
-    color: rgb(156, 152, 152);
-}
+/*  */
 
 .completedContainer p {
     text-align: center;

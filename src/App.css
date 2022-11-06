@@ -54,20 +54,20 @@ body{
   height: 25px;
   border: none;
   outline: none;
-  border-bottom: 4px solid rgb(11, 0, 170);
+  border-bottom: 4px solid navy;
   background: rgba(0, 0, 0, 0.479);
   color: #fff;
   border-radius: 10px 10px 0px 0px;
   text-transform: capitalize;
 }
 
-.textInput:hover {
-  border-bottom: 4px solid rgb(11, 0, 170);
+.textInput:focus{
+  border-bottom: 4px solid rgb(38, 39, 38);
 }
 
-.textInput:focus{
-  border-bottom: 4px solid rgb(136, 0, 170);
-}
+/* .textInput:hover{
+  border-bottom: 4px solid #fc6592 ;
+} */
 
 .textInput::placeholder {
   color: rgb(156, 152, 152);
