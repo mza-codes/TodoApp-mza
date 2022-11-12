@@ -18,6 +18,20 @@
     display: none;
 }
 
+.search input {
+    width: 90%;
+    padding: 10px;
+    border-radius: 14px;
+    border: 0.5px solid rgba(128, 128, 128, 0.192);
+    outline: none;
+    font-weight: 500;
+    font-size: medium;
+}
+
+.search input:invalid {
+    border: 0.5px solid red !important;
+}
+
 .todoContainer .todoItem {
     transition: scale 600ms;
     transition: transform 500ms;
@@ -89,4 +103,58 @@
 
 .undoBtn:hover {
     color: #000;
+}
+
+.resultItem {
+    transition: scale 600ms;
+    transition: transform 500ms;
+    margin-top: 10px;
+    padding: 16px 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    width: 70%;
+    height: 25px;
+    border: none;
+    outline: none;
+    background: linear-gradient(0.70turn, rgb(255, 62, 223), rgb(255, 0, 0));
+    /* background: rgba(0, 0, 0, 0.479); */
+    color: #000;
+    border-radius: 16px 4px 16px 4px;
+    text-transform: capitalize;
+    position: relative;
+}
+
+.resultItem div {
+    position: absolute;
+    bottom: 8px;
+    right: 0%;
+    height: inherit;
+    padding: 8px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.resultItem div:last-child {
+    position: absolute;
+    bottom: 8px;
+    right: 9%;
+    height: inherit;
+    padding: 8px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.resultItem:hover {
+    transform: scale(1.2);
+    background: linear-gradient(0.30turn, rgb(255, 173, 193), rgb(11, 0, 75));
+}
+
+.horizLine {
+    margin: 4px;
+    width: 90%;
+    border: none;
+    outline: none;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.295);
+    border-radius: 10px;
 }

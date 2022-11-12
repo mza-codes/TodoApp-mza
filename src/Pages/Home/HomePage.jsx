@@ -12,13 +12,14 @@ function HomePage() {
     const [text, setText] = useState("");
     const [desc, setDesc] = useState("");
     const [saveSession, setSaveSession] = useState(true);
+    const [searchKey, setSearchKey] = useState("");
+    const [result, setResult] = useState([]);
     const [state, dispatch] = useReducer(todoReducer, todoState);
     const regEx = /^[a-zA-Z][a-zA-Z ]*$/;
     let isCompleted = false;
     let isPending = false;
 
     if (state.data.length >= 1) {
-        console.log(state.data.length);
         isCompleted = state.data.filter(item => item.completed === true).length >= 1;
         isPending = state.data.filter(item => item.pending === true || item.deleted === true).length >= 1;
     };
@@ -86,6 +87,24 @@ function HomePage() {
         };
     };
 
+    const removeList = () => {
+        if (window.confirm("This Will Remove All task in your current list, Continue?")) {
+            console.log("called");
+            localStorage.removeItem("mza-TodoApp");
+            const data = [];
+            dispatch({ type: "UPDATE_TASK", payload: data });
+            return;
+        };
+    };
+
+    const handleSearch = (query) => {
+        setSearchKey(query);
+        let res = state.data.filter(item => (
+            item.task?.toLowerCase()?.includes(query.toLowerCase())
+        ));
+        setResult(res);
+    };
+
     useEffect(() => {
         let data = localStorage.getItem("mza-TodoApp");
         if (data !== null || undefined) {
@@ -107,6 +126,26 @@ function HomePage() {
                     <div className='leftWrapper'>
                         <h2>To Do</h2>
                         <div className="todoContainer">
+                            <div className="search">
+                                <input type="text" maxLength={15} placeholder="Search..."
+                                    onChange={e => handleSearch(e.target.value)} />
+                            </div>
+                            {searchKey && (<>
+                                {result.map((data, i) => (
+                                    <div className={`resultItem ${data.deleted && 'deleted'}`} key={i}>
+                                        {data.task.substring(0, 18)}
+                                        {data.pending ? <div onClick={e => handleDone(data)}>
+                                            <i className="bi bi-list-check"></i>
+                                        </div> : <div></div>}
+                                        {data.deleted ? <div></div> : <div onClick={e => handleDelete(data)}>
+                                            <i className='bi bi-trash'></i>
+                                        </div>}
+                                    </div>
+                                ))
+                                }
+                                {result.length === 0 && <h5>No Results for Query "{searchKey?.substring(0, 20)}"</h5>}
+                                <hr className='horizLine' />
+                            </>)}
                             {state?.data?.map((todo, i) => {
                                 if (todo.pending && !todo.deleted) return (
                                     <div className="todoItem" key={i}>
@@ -159,6 +198,9 @@ function HomePage() {
                             style={{ color: `${saveSession ? "green" : "black"}` }}
                             icon={saveSession ? "foundation:checkbox" : "ic:twotone-check-box-outline-blank"}
                         />
+                    </div>
+                    <div className="clearBtn">
+                        <button onClick={removeList}>Clear Data</button>
                     </div>
                 </div>
             </div>

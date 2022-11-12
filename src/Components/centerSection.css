@@ -68,3 +68,25 @@
     scale: 1.9;
     cursor: pointer;
 }
+
+.clearBtn{
+    margin: 6px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.clearBtn button{
+    padding: 10px;
+    border-radius: 14px;
+    border: none;
+    outline: none;
+    background: rgb(241, 135, 109);
+    font-weight: 600;
+    max-width: max-content;
+    transition: all 800ms;
+}
+
+.clearBtn button:hover{
+    border-radius: 14px 4px 14px 4px;
+    background:  linear-gradient(to top left,transparent,red);
+}
