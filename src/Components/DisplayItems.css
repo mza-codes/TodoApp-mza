@@ -1,0 +1,78 @@
+.page h2 {
+    font-size: 5rem;
+    margin-bottom: 10px;
+}
+
+.dataContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 350px;
+    height: 280px;
+    background-color: rgba(0, 0, 0, 0.151);
+    padding: 12px;
+    margin: 5px;
+    border-radius: 20px;
+    text-transform: capitalize;
+    transition: all 700ms;
+}
+
+#data p {
+    font-weight: 700;
+}
+
+.pending {
+    background: linear-gradient(to top left, #000a64, rgb(37, 211, 255));
+    color: #fff;
+}
+
+.completed {
+    background: linear-gradient(to top left, #f0fc42, #166b29);
+}
+
+.deletedCard {
+    background: linear-gradient(to top left, #f12f86, rgb(255, 0, 55)) !important;
+    text-decoration: line-through;
+    color: rgb(54, 51, 51);
+}
+
+.def {
+    background: linear-gradient(to top left, blue, white);
+}
+
+.pending:hover {
+    transform: scale(0.9);
+    background: linear-gradient(to top left, #004a64, rgb(131, 37, 255));
+}
+
+.completed:hover {
+    transform: scale(0.9);
+    background: linear-gradient(to top left, #42f07c, #0bb8b5);
+}
+
+.deletedCard:hover {
+    transform: scale(0.9);
+    background: linear-gradient(to top left, #f14f86, rgb(255, 0, 157)) !important;
+}
+
+.def:hover {
+    transform: scale(0.9);
+    background: linear-gradient(to top left, blue, white);
+}
+
+.center {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
