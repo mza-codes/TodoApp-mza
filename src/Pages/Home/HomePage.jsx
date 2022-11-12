@@ -4,6 +4,7 @@ import '../../Components/leftSection.css';
 import '../../Components/rightSection.css';
 import '../../Components/centerSection.css';
 import { todoReducer, todoState } from '../../Reducer/todoReducer';
+import DisplayItems from '../DisplayItems';
 
 function HomePage() {
     const today = new Date().toLocaleString("en-IN", { weekday: "long", });
@@ -15,6 +16,7 @@ function HomePage() {
     const [searchKey, setSearchKey] = useState("");
     const [result, setResult] = useState([]);
     const [state, dispatch] = useReducer(todoReducer, todoState);
+    const [view, setView] = useState(false);
     const regEx = /^[a-zA-Z][a-zA-Z ]*$/;
     let isCompleted = false;
     let isPending = false;
@@ -99,10 +101,25 @@ function HomePage() {
 
     const handleSearch = (query) => {
         setSearchKey(query);
+        if (query.length <= 0) {
+            setResult([]);
+            return false;
+        };
         let res = state.data.filter(item => (
             item.task?.toLowerCase()?.includes(query.toLowerCase())
         ));
+        console.log(res, "<><><><>", res.length);
         setResult(res);
+    };
+
+    const handleView = () => {
+        setView(!view);
+        // if (!view) return false;
+        const section = document.getElementById('next');
+        setTimeout(() => {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }, 2000);   
+
     };
 
     useEffect(() => {
@@ -120,117 +137,126 @@ function HomePage() {
     }, [state]);
 
     return (
-        <div className="home">
-            <div className='card'>
-                {isPending &&
-                    <div className='leftWrapper'>
-                        <h2>To Do</h2>
-                        <div className="todoContainer">
-                            <div className="search">
-                                <input type="text" maxLength={15} placeholder="Search..."
-                                    onChange={e => handleSearch(e.target.value)} />
+        <>
+            <div className="home">
+                <div className='card'>
+                    {isPending &&
+                        <div className='leftWrapper'>
+                            <h2>To Do</h2>
+                            <div className="todoContainer">
+                                <div className="search">
+                                    <input type="text" maxLength={15} placeholder="Search..."
+                                        onChange={e => handleSearch(e.target.value)} />
+                                </div>
+                                {searchKey && (<>
+                                    {result.map((data, i) => (
+                                        <div className={`resultItem ${data.deleted && 'deleted'}`} key={i}
+                                            style={{ backgroundColor: { ...data.completed && "blue" } }}>
+                                            {data.task.substring(0, 18)}
+                                            {data.pending ? <div onClick={e => handleDone(data)}>
+                                                <i className="bi bi-list-check"></i>
+                                            </div> : <div></div>}
+                                            {data.deleted ? <div></div> : <div onClick={e => handleDelete(data)}>
+                                                <i className='bi bi-trash'></i>
+                                            </div>}
+                                        </div>
+                                    ))
+                                    }
+                                    {result.length === 0 && <h5>No Results for Query "{searchKey?.substring(0, 20)}"</h5>}
+                                    <hr className='horizLine' />
+                                </>)}
+                                {result.length === 0 && state?.data?.map((todo, i) => {
+                                    if (todo.pending && !todo.deleted) return (
+                                        <div className="todoItem" key={i}>
+                                            {todo.task.substring(0, 18)}
+                                            <div className='doneBtn' onClick={e => handleDone(todo)}>
+                                                <i className="bi bi-list-check"></i>
+                                            </div>
+                                            <div className="deleteBtn" onClick={e => handleDelete(todo)}>
+                                                <i className='bi bi-trash'></i>
+                                            </div>
+                                        </div>
+                                    ); else if (todo.deleted && todo.pending) return (
+                                        <div className={`doneItem ${"deleted"}`} key={i}>
+                                            {todo.task.substring(0, 18)}
+                                            <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
+                                                <iconify-icon icon="ep:remove-filled" />
+                                            </div>
+                                            <div className="undoBtn" onClick={e => undoDelete(todo)}>
+                                                <iconify-icon icon="dashicons:undo" />
+                                            </div>
+                                        </div>
+                                    ); else return false;
+                                })}
                             </div>
-                            {searchKey && (<>
-                                {result.map((data, i) => (
-                                    <div className={`resultItem ${data.deleted && 'deleted'}`} key={i}>
-                                        {data.task.substring(0, 18)}
-                                        {data.pending ? <div onClick={e => handleDone(data)}>
-                                            <i className="bi bi-list-check"></i>
-                                        </div> : <div></div>}
-                                        {data.deleted ? <div></div> : <div onClick={e => handleDelete(data)}>
-                                            <i className='bi bi-trash'></i>
-                                        </div>}
-                                    </div>
-                                ))
-                                }
-                                {result.length === 0 && <h5>No Results for Query "{searchKey?.substring(0, 20)}"</h5>}
-                                <hr className='horizLine' />
-                            </>)}
-                            {state?.data?.map((todo, i) => {
-                                if (todo.pending && !todo.deleted) return (
-                                    <div className="todoItem" key={i}>
-                                        {todo.task.substring(0, 18)}
-                                        <div className='doneBtn' onClick={e => handleDone(todo)}>
-                                            <i className="bi bi-list-check"></i>
-                                        </div>
-                                        <div className="deleteBtn" onClick={e => handleDelete(todo)}>
-                                            <i className='bi bi-trash'></i>
-                                        </div>
-                                    </div>
-                                ); else if (todo.deleted && todo.pending) return (
-                                    <div className={`doneItem ${"deleted"}`} key={i}>
-                                        {todo.task.substring(0, 18)}
-                                        <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
-                                            <iconify-icon icon="ep:remove-filled" />
-                                        </div>
-                                        <div className="undoBtn" onClick={e => undoDelete(todo)}>
-                                            <iconify-icon icon="dashicons:undo" />
-                                        </div>
-                                    </div>
-                                ); else return false;
-                            })}
                         </div>
-                    </div>
-                }
-            </div>
-            <div className='card'>
-                <div className="centerWrapper">
-                    <div className="addData">
-                        <h2>What's Up!</h2>
-                        <p>It's <b>{today} {time}</b> & You're Here! <br />
-                            How about creating a to do list!</p>
-                        <input type="text" maxLength="50" name='todo' className={`textInput ${err ? "showErr" : ""}`} id='textInput'
-                            onKeyPress={e => { if (e.key === "Enter") { setText(e.target.value); handleList() } }}
-                            value={text} placeholder="Workout..."
-                            onChange={e => setText(e.target.value)} />
-                        <div className='addBtn' onClick={handleList}><i className="bi bi-file-plus"></i></div>
-                    </div>
-                    <div className="section">
-                        <p>Description</p>
-                        <textarea placeholder='Go for shopping...' value={desc} onChange={e => setDesc(e.target.value)}
-                            onKeyPress={e => { if (e.key === "Enter") { setDesc(e.target.value); handleList() } }} ></textarea>
-                        {/* <iconify-icon icon="cil:truck" /> */}
-                        <button onClick={e => { handleList(); setDesc(""); }}>Submit</button>
-                    </div>
-                    <div className='toggleBtn'>
-                        <h5>Save Session </h5>
-                        <iconify-icon onClick={e => setSaveSession(!saveSession)}
-                            style={{ color: `${saveSession ? "green" : "black"}` }}
-                            icon={saveSession ? "foundation:checkbox" : "ic:twotone-check-box-outline-blank"}
-                        />
-                    </div>
-                    <div className="clearBtn">
-                        <button onClick={removeList}>Clear Data</button>
+                    }
+                </div>
+                <div className='card'>
+                    <div className="centerWrapper">
+                        <div className="addData">
+                            <h2>What's Up!</h2>
+                            <p>It's <b>{today} {time}</b> & You're Here! <br />
+                                How about creating a to do list!</p>
+                            <input type="text" maxLength="50" name='todo' className={`textInput ${err ? "showErr" : ""}`} id='textInput'
+                                onKeyPress={e => { if (e.key === "Enter") { setText(e.target.value); handleList() } }}
+                                value={text} placeholder="Workout..."
+                                onChange={e => setText(e.target.value)} />
+                            <div className='addBtn' onClick={handleList}><i className="bi bi-file-plus"></i></div>
+                        </div>
+                        <div className="section">
+                            <p>Description</p>
+                            <textarea placeholder='Go for shopping...' value={desc} onChange={e => setDesc(e.target.value)}
+                                onKeyPress={e => { if (e.key === "Enter") { setDesc(e.target.value); handleList() } }} ></textarea>
+                            {/* <iconify-icon icon="cil:truck" /> */}
+                            <button onClick={e => { handleList(); setDesc(""); }}>Submit</button>
+                        </div>
+                        <div className='toggleBtn'>
+                            <h5>Save Session </h5>
+                            <iconify-icon onClick={e => setSaveSession(!saveSession)}
+                                style={{ color: `${saveSession ? "green" : "black"}` }}
+                                icon={saveSession ? "foundation:checkbox" : "ic:twotone-check-box-outline-blank"}
+                            />
+                        </div>
+                        <div className="clearBtn">
+                            <button onClick={removeList}>Clear Data</button>
+                        </div>
+                        <div className='viewMore'>
+                            <label onClick={handleView}>View</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className='card'>
-                {isCompleted &&
-                    <div className='rightWrapper'>
-                        <h2>Completed</h2>
-                        <div className="completedContainer">
-                            {state?.data?.map((todo, i) => {
-                                if (todo.completed) return (
-                                    <div className="doneItem" key={i}>
-                                        {todo.task.substring(0, 18)}
-                                        <div className='completeBtn' onClick={e => console.log(e)}>
-                                            <i className="bi bi-check2-all"></i>
+                <div className='card'>
+                    {isCompleted &&
+                        <div className='rightWrapper'>
+                            <h2>Completed</h2>
+                            <div className="completedContainer">
+                                {state?.data?.map((todo, i) => {
+                                    if (todo.completed) return (
+                                        <div className="doneItem" key={i}>
+                                            {todo.task.substring(0, 18)}
+                                            <div className='completeBtn' onClick={e => console.log(e)}>
+                                                <i className="bi bi-check2-all"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                ); else if (todo.completed && todo.deleted) return (
-                                    <div className="doneItem deleted" key={i}>
-                                        {todo.task.substring(0, 18)}
-                                        <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
-                                            <i className="bi bi-file-earmark-x-fill"></i>
+                                    ); else if (todo.completed && todo.deleted) return (
+                                        <div className="doneItem deleted" key={i}>
+                                            {todo.task.substring(0, 18)}
+                                            <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
+                                                <i className="bi bi-file-earmark-x-fill"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                ); else return false;
-                            })}
+                                    ); else return false;
+                                })}
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
-        </div>
+            <div id='next'>
+                {view && <DisplayItems data={state?.data || []} />}
+            </div>
+        </>
     )
 }
 
