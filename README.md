@@ -10,8 +10,8 @@
     <br />
     <b> Minimal CSS Designs & Effects!</b>
     <br /><br />
-    <a href="#"><img src="https://i.ibb.co/V30KnKC/apple-touch-icon-Copy.png" width="60" alt="apple-touch-icon-Copy" border="0"></a>
-    <br/>
+    <a href="#"><img src="https://github.com/mza-codes/minimal-react/blob/62fd10162f49d62abf1aa6b4ec1d5fadbab4a38f/public/logo.png" width="60" alt="apple-touch-icon-Copy" border="0"></a>
+    <br/> <br/>
     <a href="https://github.com/mza-codes/"><strong>Author</strong></a>
     <br/>
     <a href="https://github.com/mza-codes/TodoApp-mza/issues/"><strong>Report</strong></a>
