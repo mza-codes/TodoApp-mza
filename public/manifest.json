@@ -1,6 +1,20 @@
 {
-  "short_name": "ToDo List |MZA",
-  "name": "My ToDo List",
+  "short_name": "ToDo App ",
+  "name": "PWA ToDo App | MZA",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes":"32x32",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "banner.png",
+      "type": "image/png",
+      "sizes":"512x512",
+      "purpose": "any maskable"
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

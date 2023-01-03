@@ -1,9 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import App from './App';
+import * as serviceWorkerReg from "./serviceWorkerRegistration";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <App />
-);
-{/* <React.StrictMode></React.StrictMode> */ }
+createRoot(document.getElementById('root')).render(<App />);
+
+serviceWorkerReg.register();
