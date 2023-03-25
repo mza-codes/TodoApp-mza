@@ -18,14 +18,33 @@
     display: none;
 }
 
+.search{
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.err{
+    font-weight: 600;
+    color: red;
+}
+
 .search input {
     width: 90%;
     padding: 10px;
     border-radius: 14px;
-    border: 0.5px solid rgba(128, 128, 128, 0.192);
+    border: 0.5px solid rgba(128, 128, 128, 0.589);
     outline: none;
     font-weight: 500;
     font-size: medium;
+}
+
+.search input:is(:focus,:focus-visible,:focus-within){
+    
+    border-color: rgba(0, 0, 0, 0.411);
 }
 
 .search input:invalid {

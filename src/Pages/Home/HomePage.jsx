@@ -1,13 +1,12 @@
-import { useEffect, useReducer, useState } from 'react';
-import { timeGreeting } from '../../Utils/TimeUtils';
-import '../../Components/leftSection.css';
-import '../../Components/rightSection.css';
-import '../../Components/centerSection.css';
-import { todoReducer, todoState } from '../../Reducer/todoReducer';
-import DisplayItems from '../DisplayItems';
+import { useEffect, useReducer, useState } from "react";
+import { timeGreeting } from "../../Utils/TimeUtils";
+import "../../Components/leftSection.css";
+import "../../Components/rightSection.css";
+import "../../Components/centerSection.css";
+import { todoReducer, todoState } from "../../Reducer/todoReducer";
 
 function HomePage() {
-    const today = new Date().toLocaleString("en-IN", { weekday: "long", });
+    const today = new Date().toLocaleString("en-IN", { weekday: "long" });
     const time = timeGreeting[new Date().getHours()];
     const [err, setErr] = useState(false);
     const [text, setText] = useState("");
@@ -22,34 +21,32 @@ function HomePage() {
     let isPending = false;
 
     if (state.data.length >= 1) {
-        isCompleted = state.data.filter(item => item.completed === true).length >= 1;
-        isPending = state.data.filter(item => item.pending === true || item.deleted === true).length >= 1;
-    };
+        isCompleted = state.data.filter((item) => item.completed === true).length >= 1;
+        isPending = state.data.filter((item) => item.pending === true || item.deleted === true).length >= 1;
+    }
 
     const handleList = async (value) => {
-        let stat = regEx.test(text);
-        if (!stat) {
-            setErr(true);
-            return;
-        } else {
+        if (regEx.test(text)) {
             const todoItem = {
                 id: Date.now(),
                 deleted: false,
                 completed: false,
                 pending: true,
                 description: desc,
-                task: text
+                task: text,
             };
             dispatch({ type: "ADD_TASK", payload: todoItem });
             setText("");
             setErr(false);
             setDesc("");
-            return;
-        };
+        } else {
+            setErr(true);
+        }
+        return;
     };
 
     const handleDelete = async (data) => {
-        const updated = state.data.filter(item => item.id !== data.id);
+        const updated = state.data.filter((item) => item.id !== data.id);
         data.deleted = true;
         updated.push(data);
         dispatch({ type: "UPDATE_TASK", payload: updated });
@@ -57,7 +54,7 @@ function HomePage() {
     };
 
     const handleDone = async (data) => {
-        const updated = state.data.filter(item => item.id !== data.id);
+        const updated = state.data.filter((item) => item.id !== data.id);
         data.completed = true;
         data.pending = false;
         updated.push(data);
@@ -86,7 +83,7 @@ function HomePage() {
         } else {
             console.log("unSaved Data user not ticked");
             return false;
-        };
+        }
     };
 
     const removeList = () => {
@@ -96,7 +93,7 @@ function HomePage() {
             const data = [];
             dispatch({ type: "UPDATE_TASK", payload: data });
             return;
-        };
+        }
     };
 
     const handleSearch = (query) => {
@@ -104,10 +101,8 @@ function HomePage() {
         if (query.length <= 0) {
             setResult([]);
             return false;
-        };
-        let res = state.data.filter(item => (
-            item.task?.toLowerCase()?.includes(query.toLowerCase())
-        ));
+        }
+        let res = state.data.filter((item) => item.task?.toLowerCase()?.includes(query.toLowerCase()));
         console.log(res, "<><><><>", res.length);
         setResult(res);
     };
@@ -115,11 +110,10 @@ function HomePage() {
     const handleView = () => {
         setView(!view);
         // if (!view) return false;
-        const section = document.getElementById('next');
+        const section = document.getElementById("next");
         setTimeout(() => {
-            section.scrollIntoView({ behavior: 'smooth' });
-        }, 2000);   
-
+            section.scrollIntoView({ behavior: "smooth" });
+        }, 2000);
     };
 
     useEffect(() => {
@@ -128,7 +122,7 @@ function HomePage() {
             data = JSON.parse(data);
             dispatch({ type: "UPDATE_TASK", payload: data });
             return;
-        };
+        }
     }, []);
 
     useEffect(() => {
@@ -139,125 +133,203 @@ function HomePage() {
     return (
         <>
             <div className="home">
-                <div className='card'>
-                    {isPending &&
-                        <div className='leftWrapper'>
+                <div className="card">
+                    {isPending && (
+                        <div className="leftWrapper">
                             <h2>To Do</h2>
                             <div className="todoContainer">
                                 <div className="search">
-                                    <input type="text" maxLength={15} placeholder="Search..."
-                                        onChange={e => handleSearch(e.target.value)} />
+                                    <input
+                                        type="text"
+                                        maxLength={15}
+                                        placeholder="Search..."
+                                        onChange={(e) => handleSearch(e.target.value)}
+                                    />
                                 </div>
-                                {searchKey && (<>
-                                    {result.map((data, i) => (
-                                        <div className={`resultItem ${data.deleted && 'deleted'}`} key={i}
-                                            style={{ backgroundColor: { ...data.completed && "blue" } }}>
-                                            {data.task.substring(0, 18)}
-                                            {data.pending ? <div onClick={e => handleDone(data)}>
-                                                <i className="bi bi-list-check"></i>
-                                            </div> : <div></div>}
-                                            {data.deleted ? <div></div> : <div onClick={e => handleDelete(data)}>
-                                                <i className='bi bi-trash'></i>
-                                            </div>}
-                                        </div>
-                                    ))
-                                    }
-                                    {result.length === 0 && <h5>No Results for Query "{searchKey?.substring(0, 20)}"</h5>}
-                                    <hr className='horizLine' />
-                                </>)}
-                                {result.length === 0 && state?.data?.map((todo, i) => {
-                                    if (todo.pending && !todo.deleted) return (
-                                        <div className="todoItem" key={i}>
-                                            {todo.task.substring(0, 18)}
-                                            <div className='doneBtn' onClick={e => handleDone(todo)}>
-                                                <i className="bi bi-list-check"></i>
+                                {searchKey && (
+                                    <>
+                                        {result.map((data, i) => (
+                                            <div
+                                                className={`resultItem ${data.deleted && "deleted"}`}
+                                                key={i}
+                                                style={{
+                                                    backgroundColor: { ...(data.completed && "blue") },
+                                                }}
+                                            >
+                                                {data.task.substring(0, 18)}
+                                                {data.pending ? (
+                                                    <div onClick={(e) => handleDone(data)}>
+                                                        <i className="bi bi-list-check"></i>
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
+                                                {data.deleted ? (
+                                                    <div></div>
+                                                ) : (
+                                                    <div onClick={(e) => handleDelete(data)}>
+                                                        <i className="bi bi-trash"></i>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className="deleteBtn" onClick={e => handleDelete(todo)}>
-                                                <i className='bi bi-trash'></i>
-                                            </div>
-                                        </div>
-                                    ); else if (todo.deleted && todo.pending) return (
-                                        <div className={`doneItem ${"deleted"}`} key={i}>
-                                            {todo.task.substring(0, 18)}
-                                            <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
-                                                <iconify-icon icon="ep:remove-filled" />
-                                            </div>
-                                            <div className="undoBtn" onClick={e => undoDelete(todo)}>
-                                                <iconify-icon icon="dashicons:undo" />
-                                            </div>
-                                        </div>
-                                    ); else return false;
-                                })}
+                                        ))}
+                                        {result.length === 0 && (
+                                            <h5>No Results for Query "{searchKey?.substring(0, 20)}"</h5>
+                                        )}
+                                        <hr className="horizLine" />
+                                    </>
+                                )}
+                                {result.length === 0 &&
+                                    state?.data?.map((todo, i) => {
+                                        if (todo.pending && !todo.deleted)
+                                            return (
+                                                <div className="todoItem" key={i}>
+                                                    {todo.task.substring(0, 18)}
+                                                    <div
+                                                        className="doneBtn"
+                                                        onClick={(e) => handleDone(todo)}
+                                                    >
+                                                        <i className="bi bi-list-check"></i>
+                                                    </div>
+                                                    <div
+                                                        className="deleteBtn"
+                                                        onClick={(e) => handleDelete(todo)}
+                                                    >
+                                                        <i className="bi bi-trash"></i>
+                                                    </div>
+                                                </div>
+                                            );
+                                        else if (todo.deleted && todo.pending)
+                                            return (
+                                                <div className={`doneItem ${"deleted"}`} key={i}>
+                                                    {todo.task.substring(0, 18)}
+                                                    <div
+                                                        className="deletedBtn"
+                                                        onClick={(e) => deleteTodo(todo)}
+                                                    >
+                                                        <iconify-icon icon="ep:remove-filled" />
+                                                    </div>
+                                                    <div
+                                                        className="undoBtn"
+                                                        onClick={(e) => undoDelete(todo)}
+                                                    >
+                                                        <iconify-icon icon="dashicons:undo" />
+                                                    </div>
+                                                </div>
+                                            );
+                                        else return false;
+                                    })}
                             </div>
                         </div>
-                    }
+                    )}
                 </div>
-                <div className='card'>
+                <div className="card">
                     <div className="centerWrapper">
                         <div className="addData">
                             <h2>What's Up!</h2>
-                            <p>It's <b>{today} {time}</b> & You're Here! <br />
-                                How about creating a to do list!</p>
-                            <input type="text" maxLength="50" name='todo' className={`textInput ${err ? "showErr" : ""}`} id='textInput'
-                                onKeyPress={e => { if (e.key === "Enter") { setText(e.target.value); handleList() } }}
-                                value={text} placeholder="Workout..."
-                                onChange={e => setText(e.target.value)} />
-                            <div className='addBtn' onClick={handleList}><i className="bi bi-file-plus"></i></div>
+                            <p>
+                                It's{" "}
+                                <b>
+                                    {today} {time}
+                                </b>{" "}
+                                & You're Here! <br />
+                                How about creating a to do list!
+                            </p>
+                            <input
+                                type="text"
+                                maxLength="50"
+                                name="todo"
+                                className={`textInput ${err ? "showErr" : ""}`}
+                                id="textInput"
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                        setText(e.target.value);
+                                        handleList();
+                                    }
+                                }}
+                                value={text}
+                                placeholder="Workout..."
+                                onChange={(e) => setText(e.target.value)}
+                            />
+                            <div className="addBtn" onClick={handleList}>
+                                <i className="bi bi-file-plus"></i>
+                            </div>
                         </div>
+                            {err && <span style={{textAlign:"center"}} className="err">Only Alphabets are allowed!</span>}
                         <div className="section">
                             <p>Description</p>
-                            <textarea placeholder='Go for shopping...' value={desc} onChange={e => setDesc(e.target.value)}
-                                onKeyPress={e => { if (e.key === "Enter") { setDesc(e.target.value); handleList() } }} ></textarea>
+                            <textarea
+                                placeholder="Go for shopping..."
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                        setDesc(e.target.value);
+                                        handleList();
+                                    }
+                                }}
+                            ></textarea>
                             {/* <iconify-icon icon="cil:truck" /> */}
-                            <button onClick={e => { handleList(); setDesc(""); }}>Submit</button>
+                            <button
+                                onClick={(e) => {
+                                    handleList();
+                                    setDesc("");
+                                }}
+                            >
+                                Submit
+                            </button>
                         </div>
-                        <div className='toggleBtn'>
+                        <div className="toggleBtn">
                             <h5>Save Session </h5>
-                            <iconify-icon onClick={e => setSaveSession(!saveSession)}
+                            <iconify-icon
+                                onClick={(e) => setSaveSession(!saveSession)}
                                 style={{ color: `${saveSession ? "green" : "black"}` }}
-                                icon={saveSession ? "foundation:checkbox" : "ic:twotone-check-box-outline-blank"}
+                                icon={
+                                    saveSession ? "foundation:checkbox" : "ic:twotone-check-box-outline-blank"
+                                }
                             />
                         </div>
                         <div className="clearBtn">
                             <button onClick={removeList}>Clear Data</button>
                         </div>
-                        <div className='viewMore'>
-                            <label onClick={handleView}>View</label>
-                        </div>
                     </div>
                 </div>
-                <div className='card'>
-                    {isCompleted &&
-                        <div className='rightWrapper'>
+                <div className="card">
+                    {isCompleted && (
+                        <div className="rightWrapper">
                             <h2>Completed</h2>
                             <div className="completedContainer">
                                 {state?.data?.map((todo, i) => {
-                                    if (todo.completed) return (
-                                        <div className="doneItem" key={i}>
-                                            {todo.task.substring(0, 18)}
-                                            <div className='completeBtn' onClick={e => console.log(e)}>
-                                                <i className="bi bi-check2-all"></i>
+                                    if (todo.completed)
+                                        return (
+                                            <div className="doneItem" key={i}>
+                                                {todo.task.substring(0, 18)}
+                                                <div className="completeBtn" onClick={(e) => console.log(e)}>
+                                                    <i className="bi bi-check2-all"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ); else if (todo.completed && todo.deleted) return (
-                                        <div className="doneItem deleted" key={i}>
-                                            {todo.task.substring(0, 18)}
-                                            <div className="deletedBtn" onClick={e => deleteTodo(todo)}>
-                                                <i className="bi bi-file-earmark-x-fill"></i>
+                                        );
+                                    else if (todo.completed && todo.deleted)
+                                        return (
+                                            <div className="doneItem deleted" key={i}>
+                                                {todo.task.substring(0, 18)}
+                                                <div className="deletedBtn" onClick={(e) => deleteTodo(todo)}>
+                                                    <i className="bi bi-file-earmark-x-fill"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ); else return false;
+                                        );
+                                    else return false;
                                 })}
                             </div>
                         </div>
-                    }
+                    )}
                 </div>
             </div>
-            <div id='next'>
+            {/* <div id='next'>
                 {view && <DisplayItems data={state?.data || []} />}
-            </div>
+            </div> */}
         </>
-    )
+    );
 }
 
 export default HomePage;
